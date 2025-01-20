@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  redis:
+    build: ./redis
+    container_name: my-redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis:/data
+    networks:
+      - redis-network
+
+  redisinsight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redisinsight
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./redisinsight-data:/db
+    depends_on:
+      - redis
+    networks:
+      - redis-network
+
+  memcached:
+    build: ./memcached
+    container_name: my-memcached
+    ports:
+      - 11211:11211
+
+  app:
+    build: ./app
+    container_name: my-app
+    depends_on:
+      - redis
+      - memcached
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+    environment:
+      - REDIS_HOST=redis
+      - MEMCACHED_HOST=memcached
+    networks:
+      - redis-network
+
+volumes:
+  redisinsight:
+
+networks:
+  redis-network:
+    driver: bridge
