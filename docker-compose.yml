@@ -11,23 +11,78 @@ services:
     networks:
       - redis-network
 
-  redisinsight:
-    image: redislabs/redisinsight:1.14.0
-    container_name: redisinsight
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
+    command: --redis.addr=redis://redis:6379
     ports:
-      - "8001:8001"
-    volumes:
-      - ./redisinsight-data:/db
-    depends_on:
-      - redis
+      - "9121:9121"
     networks:
       - redis-network
+    depends_on:
+      - redis
 
   memcached:
     build: ./memcached
     container_name: my-memcached
     ports:
       - 11211:11211
+    networks:
+      - redis-network
+
+  memcached-exporter:
+    image: prom/memcached-exporter:latest
+    container_name: memcached-exporter
+    ports:
+      - "9150:9150"
+    command: --memcached.address=memcached:11211
+    networks:
+      - redis-network
+    depends_on:
+      - memcached
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    networks:
+      - redis-network
+    depends_on:
+      - redis-exporter
+      - memcached-exporter
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    networks:
+      - redis-network
+    depends_on:
+      - prometheus
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "8001:8001"
+    volumes:
+      - redisinsight:/redisinsight
+    environment:
+      - REDISINSIGHT_HOST=0.0.0.0
+      - REDISINSIGHT_PORT=8001
+    networks:
+      - redis-network
+    depends_on:
+      - redis
 
   app:
     build: ./app
@@ -45,8 +100,33 @@ services:
     networks:
       - redis-network
 
+  frontend:
+    build: ./frontend
+    container_name: my-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    networks:
+      - redis-network
+    depends_on:
+      - app
+
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    networks:
+      - redis-network
+    volumes:
+      - ./app:/scripts
+
 volumes:
   redisinsight:
+  prometheus_data:
+  grafana_data:
 
 networks:
   redis-network:

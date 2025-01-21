@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Custom Tremor Overrides */
+.tremor-Card-root {
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #e2e8f0;
+}
+
+.tremor-Card-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  border-color: #cbd5e1;
+}
+
+/* Badge Styles */
+.tremor-Badge-root {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* Tab Styles */
+.tremor-TabList-root {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.tremor-Tab-root {
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.375rem;
+}
+
+.tremor-Tab-root:hover {
+  background-color: #f1f5f9;
+}
+
+.tremor-Tab-root[data-headlessui-state="selected"] {
+  font-weight: 600;
+  color: #1e40af;
+  background-color: #eff6ff;
+}
+
+/* Chart Styles */
+.tremor-LineChart-root {
+  height: 400px !important;
+  margin: 1rem 0;
+}
+
+.tremor-LineChart-line {
+  stroke-width: 3;
+}
+
+.tremor-LineChart-path {
+  fill: none;
+}
+
+.tremor-LineChart-marker {
+  r: 4;
+}
+
+.tremor-LineChart-grid {
+  stroke: #e2e8f0;
+  stroke-width: 1;
+}
+
+.tremor-LineChart-axis text {
+  font-size: 12px;
+  fill: #64748b;
+}
+
+.tremor-LineChart-tick {
+  stroke: #cbd5e1;
+  stroke-width: 1;
+}
+
+.tremor-Legend-root {
+  padding: 1rem 0;
+}
+
+.tremor-Legend-list {
+  gap: 1.5rem;
+}
+
+.tremor-Legend-item {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.tremor-Legend-marker {
+  width: 12px;
+  height: 12px;
+  margin-right: 0.5rem;
+}
+
+/* Progress Bar Styles */
+.tremor-ProgressBar-root {
+  height: 8px;
+  border-radius: 999px;
+}
+
+/* Metric Styles */
+.tremor-Metric-root {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Title Styles */
+.tremor-Title-root {
+  letter-spacing: -0.025em;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
