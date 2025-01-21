@@ -19,7 +19,7 @@ This project demonstrates and compares the performance of Redis and Memcached as
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:ceubanks/redis-lab.git
    cd redis-lab
    ```
 
